@@ -149,14 +149,14 @@ class Adapter(BaseAdapter):
                 )
             )
         if self.onebot_config.onebot_ws_urls:
-            if not isinstance(self.driver, ForwardDriver):
+            if isinstance(self.driver, ForwardDriver):
+                self.driver.on_startup(self._start_forward)
+                self.driver.on_shutdown(self._stop_forward)
+            else:
                 log(
                     "WARNING",
                     f"Current driver {self.config.driver} don't support forward connections! Ignored",
                 )
-            else:
-                self.driver.on_startup(self._start_forward)
-                self.driver.on_shutdown(self._stop_forward)
 
     @overrides(BaseAdapter)
     async def _call_api(self, bot: Bot, api: str, **data: Any) -> Any:
@@ -204,9 +204,7 @@ class Adapter(BaseAdapter):
                 else "application/json"
             }
             if self.onebot_config.onebot_access_token is not None:
-                headers["Authorization"] = (
-                    "Bearer " + self.onebot_config.onebot_access_token
-                )
+                headers["Authorization"] = f"Bearer {self.onebot_config.onebot_access_token}"
 
             encoded_data = (
                 msgpack.packb(action_data, default=msgpack_encoder)

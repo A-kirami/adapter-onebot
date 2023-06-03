@@ -8,8 +8,8 @@ async def test_message_escape():
     a = Message([MessageSegment.text("test"), MessageSegment.at(123)])
     assert Message(str(a)) == a
 
-    assert Message() + "[CQ:test]" == Message(MessageSegment.text("[CQ:test]"))
-    assert "[CQ:test]" + Message() == Message(MessageSegment.text("[CQ:test]"))
+    assert f"{Message()}[CQ:test]" == Message(MessageSegment.text("[CQ:test]"))
+    assert f"[CQ:test]{Message()}" == Message(MessageSegment.text("[CQ:test]"))
 
     a = Message()
     a += "[CQ:test]"

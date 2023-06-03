@@ -146,9 +146,7 @@ def convert_chinese_to_bool(message: Union[Message, str]) -> Optional[bool]:
 
     if text in CHINESE_AGREE_WORD:
         return True
-    if text in CHINESE_DECLINE_WORD:
-        return False
-    return None
+    return False if text in CHINESE_DECLINE_WORD else None
 
 
 def remove_empty_lines(
